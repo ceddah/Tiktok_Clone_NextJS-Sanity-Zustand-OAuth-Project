@@ -36,7 +36,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
                 <Image
                   width={62}
                   height={62}
-                  className="rounded-full"
+                  className="rounded-full cursor-pointer"
                   src={post.postedBy.image}
                   alt="profile-photo"
                 />
