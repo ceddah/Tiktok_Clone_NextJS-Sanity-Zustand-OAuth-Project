@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BASE_URL } from "../utils";
 import { useRouter } from "next/router";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -9,10 +10,10 @@ import { SanityAssetDocument } from "@sanity/client";
 import { topics } from "../utils/constants";
 
 const Upload = () => {
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [videoAsset, setVideoAsset] = useState<SanityAssetDocument | undefined>();
-  const [wrongFileType, setWrongFileType] = useState<Boolean>(false);
-  const [savingPost, setSavingPost] = useState<Boolean>(false);
+  const [wrongFileType, setWrongFileType] = useState<boolean>(false);
+  const [savingPost, setSavingPost] = useState<boolean>(false);
   const [topic, setTopic] = useState<String>(topics[0].name);
   const [caption, setCaption] = useState("");
   const { userProfile }: { userProfile: any } = useAuthStore();
@@ -60,7 +61,7 @@ const Upload = () => {
         topic,
       };
 
-      await axios.post(`http://localhost:3000/api/post`, document);
+      await axios.post(`${BASE_URL}/api/post`, document);
       router.push("/");
     }
   };

@@ -12,12 +12,12 @@ interface IProps {
 }
 
 const VideoCard: NextPage<IProps> = ({ post }) => {
-  const [isHover, setIsHover] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [isHover, setIsHover] = useState<boolean>(false);
+  const [playing, setPlaying] = useState<boolean>(false);
+  const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const onVideoPress = () => {
+  const onVideoPress = (): void => {
     if (playing) {
       videoRef?.current?.pause();
       setPlaying(false);
@@ -26,6 +26,13 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
       setPlaying(true);
     }
   };
+
+  useEffect(() => {
+    if (videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
+    }
+  }, [isVideoMuted]);
+
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
       <div>
@@ -69,7 +76,6 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
               ref={videoRef}
               src={post.video.asset.url}
               loop
-              muted={isVideoMuted}
               className="lg:w-[600px] h-[300px] md:h-[400px] lg:h-[530px] w-[200px] rounded-2xl cursor-pointer bg-gray-100"
             ></video>
           </Link>
