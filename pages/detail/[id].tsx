@@ -36,7 +36,7 @@ const Detail = ({ postDetails }: IProps) => {
       setPlaying(true);
     }
   };
-  console.log(post);
+
   const handleLike = async (like: boolean) => {
     if (userProfile) {
       const { data } = await axios.put(`${BASE_URL}/api/like`, {
@@ -48,7 +48,19 @@ const Detail = ({ postDetails }: IProps) => {
     }
   };
 
-  const addComment = (): void => {};
+  const addComment = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    if (userProfile && comment) {
+      setIsPostingComment(true);
+      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        comment,
+      });
+      setPost({ ...post, comments: data.comments });
+      setComment("");
+      setIsPostingComment(false);
+    }
+  };
 
   useEffect(() => {
     if (post && videoRef?.current) {
@@ -117,7 +129,7 @@ const Detail = ({ postDetails }: IProps) => {
           <div className="px-10">
             <p className=" text-md text-lg text-gray-600">{post.caption}</p>
           </div>
-          <div className="mt-10 px-10">
+          <div className="mt-2 mb-3 px-10">
             {userProfile && (
               <LikeButton
                 handleDislike={() => handleLike(false)}
@@ -127,7 +139,13 @@ const Detail = ({ postDetails }: IProps) => {
               />
             )}
           </div>
-          <Comments />
+          <Comments
+            comment={comment}
+            setComment={setComment}
+            addComment={addComment}
+            comments={post.comments}
+            isPostingComment={isPostingComment}
+          />
         </div>
       </div>
     </div>

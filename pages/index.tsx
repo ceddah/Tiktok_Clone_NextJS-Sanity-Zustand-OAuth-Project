@@ -15,7 +15,7 @@ const Home = ({ videos }: IProps) => {
       {videos.length ? (
         videos.map((video: Video) => <VideoCard post={video} key={video._id} />)
       ) : (
-        <NoResults text="No videos found." />
+        <NoResults text="No videos found." onComments={false} />
       )}
     </div>
   );
