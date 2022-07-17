@@ -9,7 +9,11 @@ interface IProps {
   videos: Video[];
 }
 
-const Home = ({ videos }: IProps) => {
+// Have a state which keeps track of current topic, when we press twice on same topic we are returning the state
+// back to "all" which is initial value. Then just create an useEffect which will track query and set new videos to
+// show based on current topic.
+
+const Home: NextPage<IProps> = ({ videos }) => {
   return (
     <div className="flex flex-col gap-10 videos h-full">
       {videos.length ? (
