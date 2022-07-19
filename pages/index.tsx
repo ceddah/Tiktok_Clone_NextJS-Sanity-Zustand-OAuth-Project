@@ -9,10 +9,6 @@ interface IProps {
   videos: Video[];
 }
 
-// Have a state which keeps track of current topic, when we press twice on same topic we are returning the state
-// back to "all" which is initial value. Then just create an useEffect which will track query and set new videos to
-// show based on current topic.
-
 const Home: NextPage<IProps> = ({ videos }) => {
   return (
     <div className="flex flex-col gap-10 videos h-full">
@@ -25,10 +21,15 @@ const Home: NextPage<IProps> = ({ videos }) => {
   );
 };
 
-export const getServerSideProps = async () => {
-  const { data } = await axios.get(`${BASE_URL}/api/post`);
+export const getServerSideProps = async ({ query: { topic } }: { query: { topic: string } }) => {
+  let response;
+  if (topic) {
+    response = await axios.get(`${BASE_URL}/api/discover/${topic}`);
+  } else {
+    response = await axios.get(`${BASE_URL}/api/post`);
+  }
 
-  return { props: { videos: data } };
+  return { props: { videos: response.data } };
 };
 
 export default Home;

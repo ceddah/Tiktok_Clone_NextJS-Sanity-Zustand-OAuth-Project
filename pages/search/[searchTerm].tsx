@@ -4,6 +4,7 @@ import axios from "axios";
 import { GoVerified } from "react-icons/go";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 import useAuthStore from "../../store/authStore";
 import VideoCard from "../../components/VideoCard";
@@ -12,8 +13,15 @@ import { IUser, Video } from "../../types";
 
 const Search = ({ videos }: { videos: Video[] }) => {
   const [showAccounts, setShowAccounts] = useState(true);
+  const {
+    query: { searchTerm },
+  }: any = useRouter();
+  const { allUsers } = useAuthStore();
   const isAccounts = showAccounts ? "border-b-2 border-black" : "text-gray-400";
   const isVideos = !showAccounts ? "border-b-2 border-black" : "text-gray-400";
+  const searchedAccounts = allUsers.filter((user: IUser) =>
+    user.userName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="w-full">
@@ -31,6 +39,45 @@ const Search = ({ videos }: { videos: Video[] }) => {
           Posts
         </p>
       </div>
+      {showAccounts ? (
+        <div className="md:mt-16">
+          {searchedAccounts.length > 0 ? (
+            searchedAccounts.map((user: IUser, idx: number) => (
+              <Link key={idx} href={`/profile/${user._id}`}>
+                <div className=" flex gap-3 p-2 cursor-pointer font-semibold rounded border-b-2 border-gray-200">
+                  <div>
+                    <Image
+                      width={50}
+                      height={50}
+                      className="rounded-full"
+                      alt="user-profile"
+                      src={user.image}
+                    />
+                  </div>
+                  <div>
+                    <div>
+                      <p className="flex gap-1 items-center text-lg font-bold text-primary">
+                        {user.userName} <GoVerified className="text-blue-400" />
+                      </p>
+                      <p className="capitalize text-gray-400 text-sm">{user.userName}</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <NoResults text={`No Account Results for ${searchTerm}`} onComments={false} />
+          )}
+        </div>
+      ) : (
+        <div className="md:mt-16 flex flex-wrap gap-6 md:justify-start">
+          {videos.length ? (
+            videos.map((video: Video, idx: number) => <VideoCard post={video} key={idx} />)
+          ) : (
+            <NoResults text={`No video results for ${searchTerm}`} onComments={false} />
+          )}
+        </div>
+      )}
     </div>
   );
 };
