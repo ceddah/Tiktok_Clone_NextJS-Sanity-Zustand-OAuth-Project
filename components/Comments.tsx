@@ -35,9 +35,9 @@ const Comments = ({ isPostingComment, comment, setComment, addComment, comments 
             <>
               {allUsers.map(
                 (user: IUser) =>
-                  user._id === (item.postedBy._id || item.postedBy._ref) && (
+                  user?._id === (item.postedBy?._id || item.postedBy._ref) && (
                     <div className="p-2 items-center" key={idx}>
-                      <Link href={`/profile/${user._id}`}>
+                      <Link href={`/profile/${user?._id}`}>
                         <div className="flex items-start gap-3">
                           <div className="w-12 h-12">
                             <Image

@@ -40,8 +40,8 @@ const Detail = ({ postDetails }: IProps) => {
   const handleLike = async (like: boolean) => {
     if (userProfile) {
       const { data } = await axios.put(`${BASE_URL}/api/like`, {
-        userId: userProfile._id,
-        postId: post._id,
+        userId: userProfile?._id,
+        postId: post?._id,
         like,
       });
       setPost({ ...post, likes: data.likes });
@@ -52,8 +52,8 @@ const Detail = ({ postDetails }: IProps) => {
     e.preventDefault();
     if (userProfile && comment) {
       setIsPostingComment(true);
-      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
-        userId: userProfile._id,
+      const { data } = await axios.put(`${BASE_URL}/api/post/${post?._id}`, {
+        userId: userProfile?._id,
         comment,
       });
       setPost({ ...post, comments: data.comments });
@@ -108,7 +108,7 @@ const Detail = ({ postDetails }: IProps) => {
       </div>
       <div className="relative w-[1000px] md:w-[900px] lg:w-[700px]">
         <div className="lg:mt-20 mt-10">
-          <Link href={`/profile/${post.postedBy._id}`}>
+          <Link href={`/profile/${post.postedBy?._id}`}>
             <div className="flex gap-4 mb-4 bg-white w-full pl-10 cursor-pointer">
               <Image
                 width={60}
